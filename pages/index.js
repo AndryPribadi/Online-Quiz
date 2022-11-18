@@ -1,7 +1,8 @@
 import Head from "next/head";
 import { useState } from "react";
-// import {FaArrowLeft} from "react-icons/fa";
-// import Question from "../components/Question";
+import { FaArrowLeft } from "react-icons/fa";
+import Question from "../components/Question";
+import ExerciseList from "../components/ExerciseList";
 
 export function getServerSideProps() {
   const exercises = [
@@ -108,9 +109,16 @@ export default function Home({ exercises }) {
     score: 0,
   };
   const [state, setState] = useState(initialState);
-  const { isExerciseDone, exerciseId, isExerciseShown, question, score } =
-    state;
-  const showExercise = (id) => {};
+  const { isExerciseShown, questions, isExerciseDone, score } = state;
+
+  const showExercise = (id) => {
+    setState({
+      ...state,
+      exerciseId: id,
+      questions: getQuestions(id),
+      isExerciseShown: true,
+    });
+  };
   const hideExercise = () => {};
   const finishTest = () => {};
   return (
@@ -122,13 +130,11 @@ export default function Home({ exercises }) {
       <div className="w-1/2 m-auto mt-[120px] bg-gray-200 p-6 rounded-md">
         <main>
           {!isExerciseShown ? (
-            <div>
-              <div>Exercise list</div>
-            </div>
+            <ExerciseList exercises={exercises} func={showExercise} />
           ) : isExerciseDone ? (
             <div>Score result</div>
           ) : (
-            <div>Question</div>
+            <Question questions={questions} />
           )}
         </main>
       </div>
