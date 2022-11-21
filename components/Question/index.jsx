@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import Answers from "./Answers";
+import NavigationButton from "./NavigationButton";
 
 export default function Question({ questions, hideExercise, finishTest }) {
   const initialState = {
@@ -16,7 +17,27 @@ export default function Question({ questions, hideExercise, finishTest }) {
 
   const submitAnswer = () => {};
   const answerQuestion = () => {};
-  const moveQuestion = () => {};
+  const moveQuestion = (direction) => {
+    switch (direction) {
+      case "next": {
+        if (currentQustion === numberOfQuestions - 1) {
+          submitAnswer();
+          return;
+        }
+        setState({
+          ...state,
+          currentQuestion: currentQuestion + 1,
+        });
+        break;
+      }
+      case "prev": {
+        setState({
+          ...state,
+          currentQuestion: currentQuestion - 1,
+        });
+      }
+    }
+  };
 
   return (
     <div>
@@ -34,10 +55,7 @@ export default function Question({ questions, hideExercise, finishTest }) {
         answerQuestion={answerQuestion}
         state={state}
       />
-      <div className="flex gap-2">
-        <button>prev</button>
-        <button>next</button>
-      </div>
+      <NavigationButton state={state} moveQuestion={moveQuestion} />
     </div>
   );
 }
