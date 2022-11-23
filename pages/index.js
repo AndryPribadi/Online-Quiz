@@ -119,8 +119,16 @@ export default function Home({ exercises }) {
       isExerciseShown: true,
     });
   };
-  const hideExercise = () => {};
-  const finishTest = () => {};
+  const hideExercise = () => {
+    setState(initialState);
+  };
+  const finishTest = (score) => {
+    setState({
+      ...state,
+      isExerciseDone: true,
+      score,
+    });
+  };
   return (
     <>
       <Head>
@@ -132,9 +140,26 @@ export default function Home({ exercises }) {
           {!isExerciseShown ? (
             <ExerciseList exercises={exercises} func={showExercise} />
           ) : isExerciseDone ? (
-            <div>Score result</div>
+            <div>
+              <p className="my-4">
+                You answered {score}/{questions.length} correctly
+              </p>
+              <button
+                onClick={() => hideExercise()}
+                className="flex items-center gap-1 bg-gray-400 p-2 rounded-sm shadow-md text-white"
+              >
+                <span>
+                  <FaArrowLeft />
+                </span>
+                <span>Back</span>
+              </button>
+            </div>
           ) : (
-            <Question questions={questions} />
+            <Question
+              questions={questions}
+              hideExercise={hideExercise}
+              finishTest={finishTest}
+            />
           )}
         </main>
       </div>

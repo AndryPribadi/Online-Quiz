@@ -15,12 +15,24 @@ export default function Question({ questions, hideExercise, finishTest }) {
   const { currentQuestion, answers, numberOfQuestions } = state;
   const question = questions[currentQuestion];
 
-  const submitAnswer = () => {};
-  const answerQuestion = () => {};
+  const submitAnswer = () => {
+    let totalScore = 0;
+    for (let i = 0; i < questions.length; i++) {
+      if (answers[i] === questions[i].correctAnswer) totalScore++;
+    }
+    finishTest(totalScore);
+  };
+  const answerQuestion = (answer) => {
+    answers[currentQuestion] = answer;
+    setState({
+      ...state,
+      answers,
+    });
+  };
   const moveQuestion = (direction) => {
     switch (direction) {
       case "next": {
-        if (currentQustion === numberOfQuestions - 1) {
+        if (currentQuestion === numberOfQuestions - 1) {
           submitAnswer();
           return;
         }
@@ -41,7 +53,10 @@ export default function Question({ questions, hideExercise, finishTest }) {
 
   return (
     <div>
-      <button className="flex items-center gap-1 bg-gray-400 p-2 rounded-sm text-white">
+      <button
+        onClick={() => hideExercise()}
+        className="flex items-center gap-1 bg-gray-400 p-2 rounded-sm text-white"
+      >
         <span>
           <FaArrowLeft />
           <span>Back</span>
